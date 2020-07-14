@@ -65,7 +65,7 @@ def get_model():
 def get_activation_model():
     img_width, img_height = 224,224
     channels = 3
-    num_classes = 2
+    num_classes = 1
     
     GAP_AM_VGG_model = applications.VGG19(weights= 'imagenet', 
                                           include_top = False, input_shape = (img_width, img_height, channels))
@@ -73,7 +73,7 @@ def get_activation_model():
     x = GAP_AM_VGG_model.output
     act_map = Activation('relu', name='activation_map')(x)
     x = GlobalAveragePooling2D()(act_map)
-    predictions = Dense(num_classes, activation = 'softmax', name='predictions')(x)
+    predictions = Dense(num_classes, activation = 'sigmoid', name='predictions')(x)
 
     gap_AM_model_final = Model(input = GAP_AM_VGG_model.input, outputs = [predictions, act_map])
     
